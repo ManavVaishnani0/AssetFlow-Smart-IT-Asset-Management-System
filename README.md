@@ -39,18 +39,5 @@ The teaching parser expects simple CSV values and does not handle quoted fields 
 - Resolve the record; the asset changes to Available.
 - Export CSV and run the C report.
 
-## GitHub
-1. Create a new empty GitHub repository.
-2. Open a terminal in this folder.
-3. Run:
-   ```
-   git init
-   git add .
-   git commit -m "Build Smart IT Asset Management System"
-   git branch -M main
-   git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPOSITORY.git
-   git push -u origin main
-   ```
-
 ## Security and scope
 Uses PDO prepared statements, output escaping and CSRF tokens on POST forms. This is a local learning/demo project, not production-ready: it has no authentication or role-based access control, and needs a fuller audit trail, backups, validation and deployment hardening before real organizational use.
