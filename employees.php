@@ -1,0 +1,9 @@
+<?php
+require 'config/db.php';require 'includes/functions.php';verify_csrf();
+if($_SERVER['REQUEST_METHOD']==='POST'){
+ if(post('action')==='add'){ $name=post('name');$email=post('email');$department=post('department');if($name!==''){$q=$pdo->prepare("INSERT INTO employees(name,email,department) VALUES(?,?,?)");$q->execute([$name,$email,$department]);flash('Employee added.');}redirect('employees.php');}
+ if(post('action')==='deactivate'){$q=$pdo->prepare("UPDATE employees SET active=0 WHERE id=?");$q->execute([(int)post('id')]);flash('Employee deactivated.');redirect('employees.php');}
+}
+$rows=$pdo->query("SELECT * FROM employees ORDER BY active DESC,name")->fetchAll();$pageTitle='Employees';require 'includes/header.php';?>
+<h1>Employees</h1><section class="panel"><h2>Add employee</h2><form method="post"><input type="hidden" name="csrf_token" value="<?=e(csrf_token())?>"><input type="hidden" name="action" value="add"><div class="formgrid"><label>Name *<input required name="name"></label><label>Email<input type="email" name="email"></label><label>Department<input name="department"></label></div><button>Add employee</button></form></section>
+<section class="panel"><h2>Employee directory</h2><table><tr><th>Name</th><th>Email</th><th>Department</th><th>Status</th><th></th></tr><?php foreach($rows as $r):?><tr><td><?=e($r['name'])?></td><td><?=e($r['email'])?></td><td><?=e($r['department'])?></td><td><?=$r['active']?'Active':'Inactive'?></td><td><?php if($r['active']):?><form method="post"><input type="hidden" name="csrf_token" value="<?=e(csrf_token())?>"><input type="hidden" name="action" value="deactivate"><input type="hidden" name="id" value="<?=$r['id']?>"><button class="link">Deactivate</button></form><?php endif;?></td></tr><?php endforeach;?></table></section><?php require 'includes/footer.php';?>
